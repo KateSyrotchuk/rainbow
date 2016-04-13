@@ -39,7 +39,6 @@ class EstateType extends AbstractType
             ))
             ->add('category', EntityType::class, array(
                 'class' => 'AppBundle:Category',
-                'choice_translation_domain' => true,
                 'choices' => $options['categories_choices'],
                 'label' => 'Выберите категорию из выпадающего списка',
                 'choice_label' => 'title',
@@ -58,9 +57,9 @@ class EstateType extends AbstractType
                 'label' => 'Этажность для квартир во многоэтажках',
             ))
             ->add('price', MoneyType::class, array(
-                'label' => 'Цена в гривнах',
+                'label' => 'Цена в долларах',
                 'grouping' => true,
-                'currency' => 'UAH',
+                'currency' => 'USD',
             ));
 
         if ($options['isDeleteImages']) {

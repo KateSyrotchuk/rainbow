@@ -13,6 +13,11 @@
                         {{ render(controller('AppBundle:Site:showMenuItem')) }}
                     </ul>
                     <ul class="nav navbar-right navbar-nav">
+                        <li>
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <a href="#">{{ app.user.username }}</a>
+                            {% endif %}
+                        </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-expanded="false">
@@ -30,15 +35,19 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
                                         class="glyphicon glyphicon-search"></i></a>
                             <ul class="dropdown-menu" style="padding:12px;">
-                                <form class="form-inline">
+                                <form action="{{ path('livesearch') }}" method="post" class="form-inline">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search">
+                                        <input type="text" class="form-control" name="slug"
+                                               onkeyup="showResult(this.value)"
+                                               placeholder={{ 'common.search.placeholder'|trans }}>
 
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn btn-default"><i
-                                                        class="glyphicon glyphicon-search"></i></button>
+                                                        class="glyphicon glyphicon-search"></i>
+                                            </button>
                                         </div>
                                     </div>
+                                    <div id="livesearch"></div>
                                 </form>
                             </ul>
                         </li>
@@ -55,7 +64,7 @@
                                     </li>
                                     <li class="divider"></li>
                                     <li>
-                                        <a href="{{ path('user_registration') }}">{{ 'security.registration'|trans }}</a>
+                                        <a href="{{ path('fos_user_registration_register') }}">{{ 'security.registration'|trans }}</a>
                                     </li>
                                     <li class="divider"></li>
                                 {% endif %}
@@ -73,17 +82,17 @@
 {% block header %}
     <header class="masthead">
         <div class="container">
-            <div class="row">
-                <div class="col col-sm-3">
-                    <img src="{{ asset("images/logo/радуга 1 - копия.png") |imagine_filter('logo') }}">
+                <div class="col col-sm-6">
+                    <a href="{{ path('homepage') }}">
+                        <img src="{{ asset("images/logo/logo_main.png") |imagine_filter('logo') }}">
+                    </a>
                 </div>
-                <div class="col col-sm-9">
+                <div class="col col-sm-6">
                     <div class="well pull-right">
                         {{ 'site.search'|trans }}
                         {{ render(controller("AppBundle:Site:search")) }}
                     </div>
                 </div>
-            </div>
             {{ wo_render_breadcrumbs() }}
         </div>
     </header>
@@ -114,7 +123,7 @@
     <footer class="clear-both">
         <div class="row">
             <div class="col-lg-12">
-                <ul class="list-inline" >
+                <ul class="list-inline">
                     <li><a href="{{ path('homepage') }}">{{ 'site.menu.homepage'|trans }}</a></li>
                     {{ render(controller('AppBundle:Site:showMenuItem')) }}
                 </ul>
@@ -124,3 +133,10 @@
         <!-- /.row -->
     </footer>
 {% endblock footer %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    <script src="{{ asset('js/livesearch.js') }}"></script>
+{% endblock javascripts %}

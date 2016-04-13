@@ -22,8 +22,8 @@ class CategoryType extends AbstractType
         if ($options['isForm_cat']) {
             $builder
                 ->add('parent', EntityType::class, array(
+                    'required' => false,
                     'class' => 'AppBundle:Category',
-                    'choice_translation_domain' => true,
                     'choice_label' => 'title',
                     'label' => 'Выберите родительскую категорию из выпадающего списка',
                 ));

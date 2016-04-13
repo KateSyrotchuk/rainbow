@@ -82,7 +82,7 @@ class Estate
      * @Assert\NotBlank(message="estate.description.blank")
      * @Assert\Length(
      *      min = 3,
-     *      max = 200,
+     *      max = 5000,
      *      minMessage = "estate.description.too_short",
      *      maxMessage = "estate.description.too_long"
      * )
@@ -124,7 +124,7 @@ class Estate
     private $district;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\File", mappedBy="estate", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\File", mappedBy="estate", cascade={"remove"}, orphanRemoval=true)
      */
     private $files;
 
@@ -136,7 +136,6 @@ class Estate
     /**
      * @var File
      */
-
     private $imageFile;
 
     /**

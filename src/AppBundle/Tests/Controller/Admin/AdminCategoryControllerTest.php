@@ -53,6 +53,7 @@ class AdminCategoryControllerTest extends BaseTestController
 
     public function testCategoryEdit()
     {
+        $this->client = static::createClient();
         $em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
         $slug = $em
             ->getRepository('AppBundle:Category')
@@ -72,14 +73,15 @@ class AdminCategoryControllerTest extends BaseTestController
 
     public function testCategoryEditManager()
     {
-        $em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
-        $slug = $em
-            ->getRepository('AppBundle:Category')
-            ->findOneBy([])->getSlug();
         $client = static::createClient(array(), array(
             'PHP_AUTH_USER' => 'user_manager2',
             'PHP_AUTH_PW'   => 'qweasz',
         ));
+        $em = $client->getContainer()->get('doctrine.orm.entity_manager');
+        $slug = $em
+            ->getRepository('AppBundle:Category')
+            ->findOneBy([])->getSlug();
+
         $crawler = $client->request('GET', "/ru/admin/category/edit/{$slug}");
 
         $this->assertEquals(403, $client->getResponse()->getStatusCode());
@@ -132,14 +134,15 @@ class AdminCategoryControllerTest extends BaseTestController
 
     public function testCategoryUpDownManager()
     {
-        $em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
-        $slug = $em
-            ->getRepository('AppBundle:Category')
-            ->findOneBy([])->getSlug();
         $client = static::createClient(array(), array(
             'PHP_AUTH_USER' => 'user_manager2',
             'PHP_AUTH_PW'   => 'qweasz',
         ));
+        $em = $client->getContainer()->get('doctrine.orm.entity_manager');
+        $slug = $em
+            ->getRepository('AppBundle:Category')
+            ->findOneBy([])->getSlug();
+
         $client->request('GET', "/ru/admin/category/up/{$slug}");
         $this->assertEquals(403, $client->getResponse()->getStatusCode());
 
